@@ -590,6 +590,44 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
       if (!n || !n.children.length) return;
       n.collapsed = force === undefined ? !n.collapsed : !force;
       this.update({ anchor: n });
+      if (!n.collapsed) { clearTimeout(this._revealT); this._revealT = setTimeout(() => this.reveal(n), this.opts.duration + 30); }
+    }
+    /** Ketuk/klik simpul: buka-tutup cabang (bila punya anak) + tampilkan detail. */
+    _tap(target) {
+      const g = target.closest && target.closest(".mm-node");
+      if (!g) return this.select(null);
+      const n = this.byId.get(g.getAttribute("data-id"));
+      const canToggle = n.children.length && !(n === this.root && this.opts.layout === "both");
+      if (canToggle) this.toggle(n);
+      this.select(n);
+    }
+    /** Buka simpul (dan jalur ke atasnya), pilih, lalu geser layar agar cabangnya terlihat. */
+    open(id) {
+      const n = typeof id === "string" ? this.byId.get(id) : id;
+      if (!n) return;
+      this._expandPath(n);
+      if (n.children.length) n.collapsed = false;
+      this.update();
+      this.select(n);
+      clearTimeout(this._revealT);
+      this._revealT = setTimeout(() => this.reveal(n, { zoomIn: true }), this.opts.duration + 30);
+    }
+    /** Pastikan simpul beserta cabang terbukanya masuk layar (geser, perkecil bila perlu). */
+    reveal(id, { pad = 48, zoomIn = false } = {}) {
+      const n = typeof id === "string" ? this.byId.get(id) : id;
+      if (!n || !n.vis) return;
+      const list = [];
+      (function walk(x, self) { list.push(x); self._visibleKids(x).forEach((c) => walk(c, self)); })(n, this);
+      const b = this.bounds(list), r = this.container.getBoundingClientRect();
+      const { k, x, y } = this.view;
+      const inside = b.x * k + x >= pad && b.y * k + y >= pad && (b.x + b.w) * k + x <= r.width - pad && (b.y + b.h) * k + y <= r.height - pad;
+      if (inside && !zoomIn) return;
+      const fitK = Math.min((r.width - pad * 2) / b.w, (r.height - pad * 2) / b.h);
+      // zoomIn (dari navigasi): perbesar sampai terbaca (maks 100%); selain itu hanya perkecil bila perlu
+      const kk = zoomIn ? clamp(fitK, 0.45, 1) : clamp(Math.min(k, fitK), Math.min(k, 0.35), 1.25);
+      const fits = b.w * kk <= r.width - pad * 2 && b.h * kk <= r.height - pad * 2;
+      const cx = b.x + b.w / 2, cy = fits ? b.y + b.h / 2 : n.y + n.h / 2;
+      this.animateView({ k: kk, x: r.width / 2 - cx * kk, y: r.height / 2 - cy * kk });
     }
     expandAll() { this.nodes.forEach((n) => (n.collapsed = false)); this.update(); setTimeout(() => this.fit(), this.opts.duration + 20); }
     collapseAll() { this.nodes.forEach((n) => (n.collapsed = n !== this.root && n.children.length > 0)); this.update(); setTimeout(() => this.fit(), this.opts.duration + 20); }
@@ -701,7 +739,7 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
 
     _bindEvents() {
       const svg = this.svg, pts = new Map();
-      let drag = null, pinch = null;
+      let drag = null, pinch = null, tapTarget = null;
       this._moved = false;
       svg.addEventListener("wheel", (e) => {
         e.preventDefault();
@@ -711,9 +749,11 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
       }, { passive: false });
       svg.addEventListener("pointerdown", (e) => {
         if (e.button !== 0 && e.pointerType === "mouse") return;
-        svg.setPointerCapture(e.pointerId);
+        // Catatan: pointer capture baru dipasang saat benar-benar menggeser. Jika dipasang di sini,
+        // event klik akan jatuh ke <svg> (bukan simpul) sehingga klik simpul tidak berfungsi.
         pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
-        this._moved = false;
+        if (pts.size === 1) { this._moved = false; tapTarget = e.target; }
+        else tapTarget = null;
         if (pts.size === 1) drag = { x: e.clientX, y: e.clientY, vx: this.view.x, vy: this.view.y };
         if (pts.size === 2) {
           const [a, b] = [...pts.values()];
@@ -732,27 +772,22 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
           this._moved = true;
         } else if (drag) {
           const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-          if (Math.abs(dx) + Math.abs(dy) > 4) { this._moved = true; svg.classList.add("mm-grabbing"); }
+          if (!this._moved && Math.abs(dx) + Math.abs(dy) > 4) {
+            this._moved = true; svg.classList.add("mm-grabbing");
+            try { svg.setPointerCapture(e.pointerId); } catch (_) {}
+          }
           if (this._moved) { this.view.x = drag.vx + dx; this.view.y = drag.vy + dy; this._applyView(); }
         }
       });
       const end = (e) => {
+        if (e.type === "pointerup" && pts.size === 1 && pts.has(e.pointerId) && !this._moved && tapTarget) this._tap(tapTarget);
+        if (pts.size === 1) tapTarget = null;
         pts.delete(e.pointerId);
         if (pts.size < 2) pinch = null;
         if (!pts.size) { drag = null; svg.classList.remove("mm-grabbing"); }
       };
       svg.addEventListener("pointerup", end);
       svg.addEventListener("pointercancel", end);
-      svg.addEventListener("click", (e) => {
-        if (this._moved) return;
-        const tg = e.target.closest("[data-toggle]");
-        if (tg) { this.toggle(tg.getAttribute("data-toggle")); return; }
-        const g = e.target.closest(".mm-node");
-        if (!g) return this.select(null);
-        const n = this.byId.get(g.getAttribute("data-id"));
-        if (n.collapsed) this.toggle(n, true); // klik simpul tertutup = buka
-        this.select(n);
-      });
       // saat ukuran kanvas berubah (panel dibuka/ditutup), jaga titik tengah tetap
       let last = null;
       this._ro = new ResizeObserver(([en]) => {
@@ -972,7 +1007,7 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
       <aside class="sidebar" id="sidebar"></aside>
       <section class="canvas" id="canvas">
         <div class="hud side-toggle"><button id="sideBtn" title="Navigasi">${ICON.side}</button></div>
-        <div class="hud hint" id="hint">Gulir untuk zoom · seret untuk geser · klik simpul untuk detail · klik ⊕ untuk buka/tutup</div>
+        <div class="hud hint" id="hint">Klik simpul untuk buka/tutup cabang &amp; lihat detail · gulir untuk zoom · seret untuk geser</div>
         <div class="minimap" id="minimap"></div>
         <div class="hud legend">${LEGEND}</div>
         <div class="hud zoombar">
@@ -1039,7 +1074,12 @@ window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "
     $("#sidebar").addEventListener("click", (e) => {
       if (e.target.closest("a")) return;
       const it = e.target.closest(".o-item");
-      if (it) { mm.select(it.dataset.id, { focus: true }); if (innerWidth <= 1100) $("#body").classList.remove("side-open"); }
+      if (!it) return;
+      const n = mm.byId.get(it.dataset.id);
+      // klik pertama: buka cabang & tampilkan; klik lagi pada item aktif: tutup cabangnya
+      if (it.classList.contains("active") && n.children.length && !n.collapsed) { mm.toggle(n, false); mm.select(n); }
+      else mm.open(n);
+      if (innerWidth <= 1100) $("#body").classList.remove("side-open");
     });
   }
   renderSidebar();
