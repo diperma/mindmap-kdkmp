@@ -1,0 +1,1179 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sub Probis 2.5 — SDM</title>
+<meta name="description" content="Mindmap Proses Bisnis, Sub Probis, Hipotesis, dan Risiko — Analisis Titik Kritis APP TW IV KDKMP 2026">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ea580c'/%3E%3Cg stroke='%23fff' stroke-width='2.2' stroke-linecap='round' fill='none'%3E%3Cpath d='M9 10l5 4M23 10l-5 4M9 22l5-4M23 22l-5-4'/%3E%3Ccircle cx='8' cy='9' r='2.4'/%3E%3Ccircle cx='24' cy='9' r='2.4'/%3E%3Ccircle cx='8' cy='23' r='2.4'/%3E%3Ccircle cx='24' cy='23' r='2.4'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='3.6' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+:root {
+  --bg: #eef2f7;
+  --panel: #ffffff;
+  --ink: #0f172a;
+  --ink-2: #334155;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --accent: #2563eb;
+  --amber: #f59e0b;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, .06), 0 8px 24px rgba(15, 23, 42, .08);
+  --font: "Segoe UI", "Segoe UI Variable", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body { font-family: var(--font); color: var(--ink); background: var(--bg); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font: inherit; color: inherit; }
+
+/* ================= Interaktif ================= */
+.app { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
+.topbar {
+  display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+  background: #0f172a; color: #e2e8f0; border-bottom: 3px solid var(--amber); min-width: 0;
+}
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1 1 auto; }
+.brand-mark { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: grid; place-items: center; flex: none; }
+.brand-mark svg { width: 22px; height: 22px; }
+.brand-text { min-width: 0; }
+.brand-title { font-weight: 750; font-size: 15.5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crumbs { font-size: 12px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.crumbs a { color: #cbd5e1; }
+.crumbs span.sep { margin: 0 6px; opacity: .6; }
+
+.search { position: relative; flex: 0 1 340px; min-width: 180px; }
+.search input {
+  width: 100%; height: 36px; border-radius: 9px; border: 1px solid #334155; background: #1e293b; color: #f1f5f9;
+  padding: 0 92px 0 34px; font: inherit; font-size: 13.5px; outline: none;
+}
+.search input:focus { border-color: var(--amber); background: #0b1220; }
+.search .ico { position: absolute; left: 10px; top: 9px; width: 16px; height: 16px; opacity: .6; }
+.search .nav { position: absolute; right: 4px; top: 4px; display: flex; align-items: center; gap: 2px; font-size: 11.5px; color: #94a3b8; }
+.search .nav button { width: 26px; height: 28px; border: 0; border-radius: 6px; background: transparent; color: #cbd5e1; cursor: pointer; }
+.search .nav button:hover { background: #334155; }
+
+.actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.seg { display: flex; background: #1e293b; border: 1px solid #334155; border-radius: 9px; padding: 2px; }
+.seg button { border: 0; background: transparent; color: #cbd5e1; padding: 6px 10px; border-radius: 7px; cursor: pointer; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.seg button:hover { background: #334155; color: #fff; }
+.seg button.on { background: #f8fafc; color: #0f172a; }
+.seg .lbl { font-size: 11px; color: #94a3b8; padding: 0 6px 0 8px; align-self: center; }
+.btn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 9px; border: 1px solid #334155; background: #1e293b; color: #e2e8f0; cursor: pointer; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.btn:hover { background: #334155; text-decoration: none; color: #fff; }
+.btn.primary { background: var(--amber); border-color: var(--amber); color: #111827; }
+.btn.primary:hover { background: #fbbf24; }
+.btn svg { width: 15px; height: 15px; }
+.dropdown { position: relative; }
+.menu { position: absolute; right: 0; top: 40px; background: #fff; color: var(--ink); border-radius: 10px; box-shadow: var(--shadow); border: 1px solid var(--line); padding: 6px; min-width: 230px; z-index: 50; display: none; }
+.menu.open { display: block; }
+.menu button, .menu a { display: block; width: 100%; text-align: left; border: 0; background: none; padding: 9px 10px; border-radius: 7px; cursor: pointer; font-size: 13px; color: var(--ink); }
+.menu button:hover, .menu a:hover { background: #f1f5f9; text-decoration: none; }
+.menu small { display: block; color: var(--muted); font-size: 11.5px; }
+.menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+
+.body { display: grid; grid-template-columns: 300px 1fr auto; min-height: 0; }
+.body.no-side { grid-template-columns: 0 1fr auto; }
+.sidebar { background: var(--panel); border-right: 1px solid var(--line); overflow: auto; min-width: 0; }
+.body.no-side .sidebar { display: none; }
+.sidebar { grid-column: 1; grid-row: 1; }
+.canvas { grid-column: 2; grid-row: 1; }
+.detail { grid-column: 3; grid-row: 1; }
+.side-head { padding: 16px 16px 8px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: #f8fafc; border: 1px solid var(--line); border-radius: 10px; padding: 8px 10px; }
+.stat b { display: block; font-size: 20px; line-height: 1.1; }
+.stat span { font-size: 11px; color: var(--muted); }
+.side-title { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; padding: 12px 16px 6px; }
+.outline { list-style: none; margin: 0; padding: 0 8px 16px; }
+.outline ul { list-style: none; margin: 2px 0 6px; padding: 0 0 0 10px; border-left: 2px solid var(--line); margin-left: 14px; }
+.o-item { display: flex; align-items: flex-start; gap: 8px; padding: 6px 8px; border-radius: 8px; cursor: pointer; font-size: 13px; line-height: 1.35; }
+.o-item:hover { background: #f1f5f9; }
+.o-item.active { background: #fef3c7; }
+.o-dot { width: 10px; height: 10px; border-radius: 3px; flex: none; margin-top: 4px; }
+.o-code { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; flex: none; min-width: 26px; }
+.o-label { flex: 1; min-width: 0; }
+.o-top > .o-item { font-weight: 700; }
+.o-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; margin-top: 2px; }
+.o-meta a { color: var(--accent); font-weight: 600; }
+
+.canvas { position: relative; overflow: hidden; min-width: 0; background-color: #f6f8fb;
+  background-image: radial-gradient(circle, #cfd8e3 1px, transparent 1.2px); background-size: 22px 22px; }
+.mm-svg { display: block; cursor: grab; user-select: none; touch-action: none; }
+.mm-svg.mm-grabbing { cursor: grabbing; }
+.mm-node { cursor: pointer; }
+.mm-node .mm-body { transition: filter .15s; }
+.mm-node:hover .mm-body { filter: brightness(1.04) drop-shadow(0 3px 8px rgba(15,23,42,.18)); }
+.mm-toggle { cursor: pointer; }
+.mm-toggle:hover circle { fill: #fef3c7; }
+.mm-dim { opacity: .18 !important; }
+.mm-link.mm-dim { opacity: .08 !important; }
+
+.hud { position: absolute; display: flex; gap: 8px; z-index: 5; }
+.zoombar { right: 16px; bottom: 16px; background: #fff; border-radius: 10px; box-shadow: var(--shadow); border: 1px solid var(--line); padding: 4px; align-items: center; gap: 2px; }
+.zoombar button { width: 34px; height: 32px; border: 0; background: none; border-radius: 7px; cursor: pointer; display: grid; place-items: center; color: var(--ink-2); }
+.zoombar button:hover { background: #f1f5f9; }
+.zoombar button svg { width: 17px; height: 17px; }
+.zoombar .pct { min-width: 52px; text-align: center; font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; padding: 6px 0; border-radius: 7px; }
+.zoombar .pct:hover { background: #f1f5f9; }
+.zoombar .div { width: 1px; height: 22px; background: var(--line); margin: 0 3px; }
+.minimap { position: absolute; right: 16px; bottom: 64px; width: 210px; height: 138px; background: rgba(255,255,255,.92); border-radius: 10px; box-shadow: var(--shadow); border: 1px solid var(--line); z-index: 5; overflow: hidden; }
+.minimap.hidden { display: none; }
+.mm-mini-svg { display: block; cursor: crosshair; }
+.legend { left: 16px; bottom: 16px; background: rgba(255,255,255,.95); border-radius: 10px; border: 1px solid var(--line); box-shadow: var(--shadow); padding: 8px 12px; font-size: 11.5px; color: var(--ink-2); gap: 14px; align-items: center; flex-wrap: wrap; max-width: calc(100% - 290px); }
+.legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.hint { left: 50%; top: 14px; transform: translateX(-50%); background: rgba(15,23,42,.85); color: #e2e8f0; font-size: 12px; padding: 7px 14px; border-radius: 99px; transition: opacity .6s; pointer-events: none; white-space: nowrap; }
+.hint.gone { opacity: 0; }
+.side-toggle { left: 12px; top: 12px; }
+.side-toggle button { width: 34px; height: 34px; border-radius: 9px; border: 1px solid var(--line); background: #fff; box-shadow: var(--shadow); cursor: pointer; display: grid; place-items: center; }
+.side-toggle svg { width: 17px; height: 17px; }
+
+.detail { width: 0; overflow: hidden; background: var(--panel); border-left: 1px solid var(--line); transition: width .28s ease; }
+.detail.open { width: 380px; }
+.detail-inner { width: 380px; height: 100%; overflow: auto; }
+.d-head { padding: 18px 18px 16px; color: #fff; position: relative; }
+.d-kicker { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; opacity: .85; }
+.d-title { font-size: 18px; font-weight: 750; line-height: 1.3; margin-top: 4px; padding-right: 26px; }
+.d-close { position: absolute; right: 12px; top: 12px; width: 30px; height: 30px; border-radius: 8px; border: 0; background: rgba(255,255,255,.18); color: #fff; cursor: pointer; font-size: 18px; line-height: 1; }
+.d-close:hover { background: rgba(255,255,255,.3); }
+.d-path { font-size: 11.5px; margin-top: 10px; opacity: .85; line-height: 1.5; }
+.d-path a { color: #fff; text-decoration: underline; text-decoration-color: rgba(255,255,255,.4); cursor: pointer; }
+.d-body { padding: 6px 18px 24px; }
+.d-sec { margin-top: 16px; }
+.d-sec h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+.d-sec p { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink-2); }
+.d-list { margin: 0; padding: 0; list-style: none; counter-reset: c; }
+.d-list li { position: relative; padding: 7px 0 7px 30px; font-size: 13px; line-height: 1.45; color: var(--ink-2); border-bottom: 1px dashed var(--line); }
+.d-list li:last-child { border-bottom: 0; }
+.d-list li::before { counter-increment: c; content: counter(c); position: absolute; left: 0; top: 7px; width: 20px; height: 20px; border-radius: 50%; background: var(--c-bg, #f1f5f9); color: var(--c-fg, #334155); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+.d-list.bul li::before { content: ""; width: 7px; height: 7px; top: 14px; left: 7px; }
+.d-list li.click { cursor: pointer; }
+.d-list li.click:hover { color: var(--ink); background: #f8fafc; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12px; background: #f1f5f9; border: 1px solid var(--line); padding: 4px 9px; border-radius: 99px; color: var(--ink-2); line-height: 1.35; }
+.d-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.d-links a { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #f8fafc; color: var(--ink); }
+.d-links a:hover { background: #f1f5f9; text-decoration: none; }
+
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: #0f172a; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 13px; opacity: 0; transition: .25s; z-index: 100; pointer-events: none; }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 1100px) {
+  .actions .hide-md { display: none; }
+  .body { grid-template-columns: 0 1fr auto; }
+  .sidebar { display: none; }
+  .body.side-open .sidebar { display: block; grid-column: 1 / -1; position: absolute; z-index: 20; top: 0; bottom: 0; left: 0; width: 300px; box-shadow: var(--shadow); }
+  .body { position: relative; }
+}
+@media (max-width: 760px) {
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+  .search { order: 3; flex: 1 1 100%; }
+  .actions .seg { display: none; }
+  .hint { display: none; }
+  .detail.open { grid-column: 1 / -1; position: absolute; right: 0; left: 0; bottom: 0; width: auto; height: 55%; z-index: 30; border-left: 0; border-top: 1px solid var(--line); box-shadow: 0 -8px 24px rgba(15,23,42,.15); }
+  .detail-inner { width: 100%; }
+  .legend, .minimap { display: none; }
+}
+
+/* ================= Mode poster (render gambar) ================= */
+body.poster { height: auto; background: #ffffff; }
+.poster-wrap { display: inline-block; background: #fff; min-width: 1100px; }
+.p-head { background: #0f172a; color: #fff; padding: 26px 40px 22px; border-bottom: 5px solid var(--amber); display: flex; justify-content: space-between; gap: 32px; align-items: flex-end; }
+.p-kicker { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #fbbf24; font-weight: 700; }
+.p-title { font-size: 28px; font-weight: 800; line-height: 1.2; margin-top: 6px; }
+.p-crumbs { font-size: 13px; color: #94a3b8; margin-top: 8px; }
+.p-stats { display: flex; gap: 10px; flex: none; }
+.p-stat { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 16px; text-align: center; min-width: 96px; }
+.p-stat b { display: block; font-size: 24px; color: #fff; }
+.p-stat span { font-size: 11.5px; color: #94a3b8; }
+.p-map { background-color: #f8fafc; background-image: radial-gradient(circle, #dbe3ec 1px, transparent 1.2px); background-size: 22px 22px; display: flex; justify-content: center; }
+.p-foot { padding: 22px 40px 26px; border-top: 1px solid var(--line); display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+.p-card { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: #fff; }
+.p-card h5 { margin: 0 0 8px; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.p-card ul { margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.p-card p { margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink-2); }
+.p-src { padding: 12px 40px 16px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; border-top: 1px solid var(--line); background: #f8fafc; }
+.p-legend { display: flex; gap: 16px; font-size: 12px; color: var(--ink-2); align-items: center; }
+.p-legend i { display: inline-block; width: 14px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+
+</style>
+</head>
+<body>
+<noscript>Aktifkan JavaScript untuk melihat mindmap.</noscript>
+<script>
+window.MM_DATA = {"id": "s2_5", "type": "sub", "code": "2.5", "label": "SDM", "color": "#059669", "slug": "2.5-sdm", "probis": "Operasionalisasi", "probisCode": "2", "detail": {"titikKritis": ["Rekrutmen nasional manajer Koperasi oleh panitia seleksi (bersumber APBN)", "Rekrutmen tenaga lokal oleh Agrinas sesuai kebutuhan per koperasi", "Penetapan gaji UMK dan tunjangan atas persetujuan Menkeu; pengangkatan PKWT oleh Agrinas", "Laporan triwulanan manajer ke Agrinas, Pengurus, dan Pengawas", "Penguatan kapasitas (pelatihan, bimtek, pemagangan, sertifikasi)"], "risikoInheren": "Kekurangan tenaga kompeten; kompetensi tidak sesuai kebutuhan; turnover tinggi; konflik internal; budaya kerja yang tidak mendukung operasional; risiko fraud dari individu.", "klb": ["Kemenkop", "Agrinas", "Kemenkeu", "Kemnaker", "KDKMP (Pengurus/Pengawas)", "Pemda", "K/L teknis dan BUMN mitra (pelatihan/sertifikasi)"]}, "children": [{"id": "h2_5_1", "type": "hip", "code": "2.5.1", "label": "Perencanaan dan Rekrutmen SDM", "desc": "Pemenuhan SDM KDKMP belum sepenuhnya didasarkan pada analisis kebutuhan, kompetensi, dan proses rekrutmen yang transparan dan objektif.", "color": "#059669", "placeholder": false, "children": [{"id": "r2_5_1_1", "type": "risk", "code": "2.5.1.1", "label": "Rekrutmen manajer tidak dilakukan secara transparan dan objektif", "color": "#059669"}, {"id": "r2_5_1_2", "type": "risk", "code": "2.5.1.2", "label": "Manajer yang direkrut tidak memenuhi kompetensi dan kebutuhan pengelolaan usaha KDKMP", "color": "#059669"}, {"id": "r2_5_1_3", "type": "risk", "code": "2.5.1.3", "label": "Rekrutmen tenaga operasional dan tenaga pendukung tidak didasarkan pada analisis kebutuhan jumlah, jenis, dan kompetensi SDM", "color": "#059669"}, {"id": "r2_5_1_4", "type": "risk", "code": "2.5.1.4", "label": "Tenaga kerja lokal direkrut tanpa kriteria kebutuhan dan kompetensi yang jelas", "color": "#059669"}, {"id": "r2_5_1_5", "type": "risk", "code": "2.5.1.5", "label": "Penempatan SDM tidak sesuai dengan kompetensi dan kebutuhan masing-masing lini usaha", "color": "#059669"}, {"id": "r2_5_1_6", "type": "risk", "code": "2.5.1.6", "label": "Jumlah SDM berlebih atau tidak mencukupi dibandingkan skala dan aktivitas usaha KDKMP", "color": "#059669"}, {"id": "r2_5_1_7", "type": "risk", "code": "2.5.1.7", "label": "Rekrutmen berpotensi dipengaruhi hubungan keluarga, kepentingan Pengurus/Pengawas, atau pihak lain tanpa mekanisme pengendalian konflik kepentingan", "color": "#059669"}]}, {"id": "h2_5_2", "type": "hip", "code": "2.5.2", "label": "Tata Kelola dan Remunerasi SDM", "desc": "Pengelolaan dan pemberian remunerasi SDM KDKMP belum sepenuhnya didukung pengaturan tugas, standar pengelolaan, dasar penetapan penghasilan, dan mekanisme pertanggungjawaban yang memadai.", "color": "#059669", "placeholder": false, "children": [{"id": "r2_5_2_1", "type": "risk", "code": "2.5.2.1", "label": "SOP/pedoman pengelolaan SDM KDKMP belum tersedia atau belum mengatur secara jelas hak, kewajiban, kewenangan, penilaian kinerja, disiplin, dan pemberhentian SDM", "color": "#059669"}, {"id": "r2_5_2_2", "type": "risk", "code": "2.5.2.2", "label": "Pembagian tugas dan tanggung jawab antara Pengurus, manajer, dan tenaga operasional tidak jelas atau tumpang tindih", "color": "#059669"}, {"id": "r2_5_2_3", "type": "risk", "code": "2.5.2.3", "label": "Gaji/upah SDM ditetapkan di bawah ketentuan upah minimum yang berlaku bagi tenaga kerja yang tunduk pada ketentuan tersebut", "color": "#059669"}, {"id": "r2_5_2_4", "type": "risk", "code": "2.5.2.4", "label": "Besaran gaji dan tunjangan tidak didasarkan pada jabatan, beban kerja, kompetensi, kemampuan keuangan, dan kinerja KDKMP", "color": "#059669"}, {"id": "r2_5_2_5", "type": "risk", "code": "2.5.2.5", "label": "Pemberian tunjangan atau fasilitas kepada SDM tidak didukung analisis dan dasar penetapan yang memadai", "color": "#059669"}, {"id": "r2_5_2_6", "type": "risk", "code": "2.5.2.6", "label": "Penetapan penghasilan yang berdasarkan ketentuan memerlukan persetujuan Menteri Keuangan dilakukan tanpa persetujuan tersebut", "color": "#059669"}, {"id": "r2_5_2_7", "type": "risk", "code": "2.5.2.7", "label": "Pembayaran penghasilan/tunjangan tidak didukung pencatatan dan pertanggungjawaban yang memadai", "color": "#059669"}]}, {"id": "h2_5_3", "type": "hip", "code": "2.5.3", "label": "Pengembangan Kapasitas dan Kinerja SDM", "desc": "Pengembangan kapasitas dan pengelolaan kinerja SDM KDKMP belum sepenuhnya dilaksanakan secara terencana, terkoordinasi, dan sesuai dengan kebutuhan operasional serta pengembangan usaha.", "color": "#059669", "placeholder": false, "children": [{"id": "r2_5_3_1", "type": "risk", "code": "2.5.3.1", "label": "Penguatan kapasitas Pengurus, Pengawas, manajer, dan tenaga operasional belum dilaksanakan secara memadai", "color": "#059669"}, {"id": "r2_5_3_2", "type": "risk", "code": "2.5.3.2", "label": "Pelatihan tidak didasarkan pada pemetaan kesenjangan kompetensi (competency gap)", "color": "#059669"}, {"id": "r2_5_3_3", "type": "risk", "code": "2.5.3.3", "label": "Program pengembangan kapasitas antar-K/L, Pemda, Agrinas, BUMN, dan pihak terkait tidak terkoordinasi", "color": "#059669"}, {"id": "r2_5_3_4", "type": "risk", "code": "2.5.3.4", "label": "SDM belum memiliki kompetensi untuk mengelola keuangan, persediaan, pemasaran, digitalisasi, kemitraan, dan lini usaha KDKMP", "color": "#059669"}, {"id": "r2_5_3_5", "type": "risk", "code": "2.5.3.5", "label": "SDM pada lini usaha tertentu belum memiliki kompetensi/sertifikasi yang dipersyaratkan", "color": "#059669"}, {"id": "r2_5_3_6", "type": "risk", "code": "2.5.3.6", "label": "Tidak terdapat indikator dan evaluasi kinerja manajer serta tenaga operasional", "color": "#059669"}, {"id": "r2_5_3_7", "type": "risk", "code": "2.5.3.7", "label": "Hasil pelatihan/pengembangan kapasitas tidak dievaluasi dan belum meningkatkan kemampuan operasional KDKMP", "color": "#059669"}]}]};
+window.MM_PAGE = {"source": "Analisis Titik Kritis APP TW IV KDKMP 2026.xlsx", "sheet": "Probis_TW4", "generated": "7 Oktober 2026", "links": true, "kind": "sub", "title": "Sub Probis 2.5 — SDM", "base": "../", "file": "subprobis-2.5-sdm", "crumbs": [{"label": "Semua Proses Bisnis", "href": "../index.html"}, {"label": "Probis 2", "href": "../probis/2-operasionalisasi.html"}, {"label": "Sub Probis 2.5"}], "depth": 99, "layout": "both", "gallery": "../galeri.html", "pngs": [{"label": "PNG Sub Probis", "href": "2.5-sdm.png"}]};
+</script>
+<script>
+/*!
+ * MindMap engine — SVG mindmap tanpa dependensi.
+ * Fitur: layout dua sisi / satu sisi, zoom & pan (wheel, drag, pinch, keyboard),
+ * buka/tutup cabang beranimasi, pencarian, minimap, ekspor SVG/PNG.
+ */
+(function (global) {
+  "use strict";
+
+  const SVGNS = "http://www.w3.org/2000/svg";
+  const FONT = '"Segoe UI", "Segoe UI Variable", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif';
+
+  // ---------- util ----------
+  const el = (tag, attrs, parent) => {
+    const e = document.createElementNS(SVGNS, tag);
+    if (attrs) for (const k in attrs) if (attrs[k] != null) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const ease = (t) => 1 - Math.pow(1 - t, 3);
+  const lerp = (a, b, t) => a + (b - a) * t;
+  function hexToRgb(h) {
+    h = h.replace("#", "");
+    if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+    const n = parseInt(h, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function mix(hex, withHex, amt) {
+    const a = hexToRgb(hex), b = hexToRgb(withHex);
+    const c = a.map((v, i) => Math.round(v * (1 - amt) + b[i] * amt));
+    return "#" + c.map((v) => v.toString(16).padStart(2, "0")).join("");
+  }
+  const tint = (hex, amt) => mix(hex, "#ffffff", amt);
+  const shade = (hex, amt) => mix(hex, "#000000", amt);
+  const norm = (s) => (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+  // ---------- pengukur teks ----------
+  const measureCtx = document.createElement("canvas").getContext("2d");
+  function textW(text, size, weight) {
+    measureCtx.font = `${weight} ${size}px ${FONT}`;
+    return measureCtx.measureText(text).width;
+  }
+  function wrap(text, maxW, size, weight) {
+    const words = String(text || "").split(/\s+/).filter(Boolean);
+    const lines = [];
+    let line = "";
+    for (let w of words) {
+      // pecah kata yang terlalu panjang
+      while (textW(w, size, weight) > maxW && w.length > 4) {
+        if (line) { lines.push(line); line = ""; }
+        // utamakan memotong setelah "/" (mis. Kementerian/Lembaga/BUMN) tanpa tanda hubung
+        let j = w.length - 1;
+        while (j > 0 && !(w[j - 1] === "/" && textW(w.slice(0, j), size, weight) <= maxW)) j--;
+        if (j > 0) { lines.push(w.slice(0, j)); w = w.slice(j); continue; }
+        let i = w.length - 1;
+        while (i > 1 && textW(w.slice(0, i) + "-", size, weight) > maxW) i--;
+        lines.push(w.slice(0, i) + "-");
+        w = w.slice(i);
+      }
+      const test = line ? line + " " + w : w;
+      if (!line || textW(test, size, weight) <= maxW) line = test;
+      else { lines.push(line); line = w; }
+    }
+    if (line) lines.push(line);
+    return lines.length ? lines : [""];
+  }
+
+  // ---------- gaya per tipe simpul ----------
+  const STYLE = {
+    root:   { maxW: 340, px: 22, py: 16, r: 18, gapX: 72, gapY: 56 },
+    probis: { maxW: 270, px: 18, py: 13, r: 14, gapX: 60, gapY: 48 },
+    sub:    { maxW: 230, px: 15, py: 11, r: 12, gapX: 54, gapY: 22 },
+    hip:    { maxW: 290, px: 13, py: 10, r: 10, gapX: 42, gapY: 16 },
+    risk:   { maxW: 270, px: 10, py: 7,  r: 8,  gapX: 30, gapY: 7 },
+  };
+  const KICKER = { root: null, probis: "PROSES BISNIS", sub: "SUB PROBIS", hip: "HIPOTESIS", risk: null };
+  const LINK_W = { root: 4.5, probis: 3.4, sub: 2.4, hip: 1.6 };
+
+  /** Ubah objek data menjadi simpul internal. */
+  function buildNodes(data) {
+    const all = [];
+    (function walk(d, parent, depth) {
+      const n = {
+        id: d.id, data: d, type: d.type || (depth === 0 ? "root" : "risk"),
+        parent, depth, children: [], collapsed: false,
+        color: d.color || (parent ? parent.color : "#0f172a"),
+        x: 0, y: 0, w: 0, h: 0, side: 1,
+        cur: null, vis: false, el: null, link: null,
+      };
+      all.push(n);
+      (d.children || []).forEach((c) => n.children.push(walk(c, n, depth + 1)));
+      return n;
+    })(data, null, 0);
+    return all;
+  }
+
+  class MindMap {
+    constructor(container, data, opts = {}) {
+      this.container = container;
+      this.opts = Object.assign({
+        layout: "both",      // "both" | "right"
+        depth: Infinity,     // tingkat awal yang dibuka
+        static: false,       // mode render gambar (tanpa interaksi/animasi)
+        minimap: null,       // elemen container minimap
+        onSelect: null, onView: null, onLayout: null,
+        duration: 380,
+      }, opts);
+      this.nodes = buildNodes(data);
+      this.root = this.nodes[0];
+      this.byId = new Map(this.nodes.map((n) => [n.id, n]));
+      this.view = { k: 1, x: 0, y: 0 };
+      this.selected = null;
+      this.matches = null;
+      this._anim = null;
+
+      this.svg = el("svg", { class: "mm-svg", xmlns: SVGNS, width: "100%", height: "100%" }, container);
+      this.svg.style.fontFamily = FONT;
+      const defs = el("defs", null, this.svg);
+      const f = el("filter", { id: "mm-shadow", x: "-20%", y: "-30%", width: "140%", height: "170%" }, defs);
+      el("feDropShadow", { dx: 0, dy: 2, stdDeviation: 3, "flood-color": "#0f172a", "flood-opacity": 0.13 }, f);
+      this.vp = el("g", { class: "mm-viewport" }, this.svg);
+      this.gLinks = el("g", { class: "mm-links" }, this.vp);
+      this.gNodes = el("g", { class: "mm-nodes" }, this.vp);
+
+      this.nodes.forEach((n) => { if (n.depth >= this.opts.depth && n.children.length) n.collapsed = true; });
+      if (!this.opts.static) this._bindEvents();
+      if (this.opts.minimap) this._initMinimap(this.opts.minimap);
+      this.update({ animate: false });
+      if (this.opts.static) this._fitStatic(); else this.fit(false);
+    }
+
+    // ================= ukuran simpul =================
+    _measure(n) {
+      if (n.m) return n.m;
+      const d = n.data, st = STYLE[n.type];
+      const blocks = [];
+      const inner = st.maxW - st.px * 2;
+      if (n.type === "root") {
+        blocks.push({ lines: wrap(d.label, inner, 21, 800), size: 21, weight: 800, lh: 1.25, fill: "#ffffff" });
+        if (d.sub) blocks.push({ lines: wrap(d.sub, inner, 12.5, 500), size: 12.5, weight: 500, lh: 1.35, fill: "#cbd5e1", gap: 6 });
+      } else if (n.type === "probis") {
+        blocks.push({ lines: [`${KICKER.probis} ${d.code || ""}`.trim()], size: 10, weight: 700, lh: 1.2, fill: tint(n.color, 0.65), spacing: 0.6 });
+        blocks.push({ lines: wrap(d.label, inner, 16, 700), size: 16, weight: 700, lh: 1.25, fill: "#ffffff", gap: 4 });
+      } else if (n.type === "sub") {
+        blocks.push({ lines: [`${KICKER.sub} ${d.code || ""}`.trim()], size: 9.5, weight: 700, lh: 1.2, fill: tint(n.color, 0.7), spacing: 0.5 });
+        blocks.push({ lines: wrap(d.label, inner, 14.5, 700), size: 14.5, weight: 700, lh: 1.25, fill: "#ffffff", gap: 3 });
+      } else if (n.type === "hip") {
+        const k = d.placeholder ? "CATATAN" : `${KICKER.hip} ${d.code || ""}`.trim();
+        blocks.push({ lines: [k], size: 9.5, weight: 700, lh: 1.2, fill: shade(n.color, 0.05), spacing: 0.5 });
+        blocks.push({ lines: wrap(d.label, inner, 13, 700), size: 13, weight: 700, lh: 1.28, fill: "#0f172a", gap: 3 });
+        if (d.desc) blocks.push({ lines: wrap(d.desc, inner, 11.5, 400), size: 11.5, weight: 400, lh: 1.38, fill: "#475569", gap: 4 });
+      } else {
+        const badge = 20;
+        blocks.push({ lines: wrap(d.label, inner - badge - 7, 12, 400), size: 12, weight: 400, lh: 1.32, fill: "#1e293b", indent: badge + 7 });
+      }
+      let w = 0, h = st.py;
+      blocks.forEach((b, i) => {
+        if (i && b.gap) h += b.gap;
+        b.y = h;
+        b.lines.forEach((ln) => { w = Math.max(w, textW(ln, b.size, b.weight) + (b.spacing ? ln.length * b.spacing : 0) + (b.indent || 0)); });
+        h += b.lines.length * b.size * b.lh;
+      });
+      h += st.py;
+      w = Math.ceil(Math.min(st.maxW, w + st.px * 2));
+      if (n.type === "risk") h = Math.max(h, 30);
+      n.m = { w, h: Math.ceil(h), blocks };
+      return n.m;
+    }
+
+    // ================= layout =================
+    _visibleKids(n) { return n.collapsed ? [] : n.children; }
+
+    _subH(n) {
+      const kids = this._visibleKids(n);
+      const m = this._measure(n);
+      if (!kids.length) return (n._sh = m.h);
+      const gap = STYLE[kids[0].type].gapY;
+      const tot = kids.reduce((s, c) => s + this._subH(c), 0) + gap * (kids.length - 1);
+      return (n._sh = Math.max(m.h, tot));
+    }
+
+    _place(n, x, top, side) {
+      const m = this._measure(n);
+      n.w = m.w; n.h = m.h; n.side = side;
+      n.x = side > 0 ? x : x - m.w;
+      n.y = top + n._sh / 2 - m.h / 2;
+      const kids = this._visibleKids(n);
+      if (!kids.length) return;
+      const gap = STYLE[kids[0].type].gapY;
+      const cb = kids.reduce((s, c) => s + c._sh, 0) + gap * (kids.length - 1);
+      let t = top + (n._sh - cb) / 2;
+      const nx = side > 0 ? n.x + n.w + STYLE[n.type].gapX : n.x - STYLE[n.type].gapX;
+      kids.forEach((c) => { this._place(c, nx, t, side); t += c._sh + gap; });
+    }
+
+    layout() {
+      const r = this.root, m = this._measure(r);
+      r.w = m.w; r.h = m.h; r.x = -m.w / 2; r.y = -m.h / 2; r.side = 1;
+      const kids = this._visibleKids(r);
+      kids.forEach((c) => this._subH(c));
+      let right = kids, left = [];
+      if (this.opts.layout === "both" && kids.length > 1) {
+        const total = kids.reduce((s, c) => s + c._sh, 0);
+        let best = 1, bestD = Infinity, cum = 0;
+        for (let i = 0; i < kids.length - 1; i++) {
+          cum += kids[i]._sh;
+          const d = Math.abs(total - 2 * cum);
+          if (d < bestD) { bestD = d; best = i + 1; }
+        }
+        right = kids.slice(0, best); left = kids.slice(best);
+      }
+      const gx = STYLE.root.gapX;
+      [[right, 1, m.w / 2 + gx], [left, -1, -m.w / 2 - gx]].forEach(([list, side, x]) => {
+        if (!list.length) return;
+        const gap = STYLE[list[0].type].gapY;
+        const tot = list.reduce((s, c) => s + c._sh, 0) + gap * (list.length - 1);
+        let t = -tot / 2;
+        list.forEach((c) => { this._place(c, x, t, side); t += c._sh + gap; });
+      });
+    }
+
+    _visibleList() {
+      const out = [];
+      (function walk(n, self) {
+        out.push(n);
+        self._visibleKids(n).forEach((c) => walk(c, self));
+      })(this.root, this);
+      return out;
+    }
+
+    bounds(list) {
+      list = list || this._visibleList();
+      let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+      list.forEach((n) => {
+        x0 = Math.min(x0, n.x - 18); y0 = Math.min(y0, n.y);
+        x1 = Math.max(x1, n.x + n.w + 18); y1 = Math.max(y1, n.y + n.h);
+      });
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+    }
+
+    // ================= render =================
+    _nodeEl(n) {
+      if (n.el) return n.el;
+      const m = this._measure(n), st = STYLE[n.type], d = n.data;
+      const g = el("g", { class: `mm-node mm-${n.type}`, "data-id": n.id });
+      n.halo = el("rect", { x: -5, y: -5, width: m.w + 10, height: m.h + 10, rx: st.r + 5, fill: "none", stroke: "#f59e0b", "stroke-width": 3.5, class: "mm-halo", visibility: "hidden" }, g);
+      let fill, stroke = "none", sw = 0, dash = null;
+      if (n.type === "root") fill = "#0f172a";
+      else if (n.type === "probis" || n.type === "sub") fill = n.color;
+      else if (n.type === "hip") { fill = d.placeholder ? "#f8fafc" : tint(n.color, 0.9); stroke = d.placeholder ? "#94a3b8" : tint(n.color, 0.35); sw = 1.4; if (d.placeholder) dash = "5 4"; }
+      else { fill = "#ffffff"; stroke = tint(n.color, 0.55); sw = 1; }
+      el("rect", { width: m.w, height: m.h, rx: st.r, fill, stroke, "stroke-width": sw, "stroke-dasharray": dash, filter: n.type === "risk" ? null : "url(#mm-shadow)", class: "mm-body" }, g);
+      if (n.type === "hip" && !d.placeholder) {
+        const cp = el("clipPath", { id: "mmc-" + n.id }, g);
+        el("rect", { width: m.w, height: m.h, rx: st.r }, cp);
+        el("rect", { x: 0, y: 0, width: 5, height: m.h, fill: n.color, "clip-path": `url(#mmc-${n.id})` }, g);
+      }
+      if (n.type === "root") el("rect", { x: st.px, y: m.h - 6, width: m.w - st.px * 2, height: 3, rx: 1.5, fill: "#f59e0b" }, g);
+      if (n.type === "risk") {
+        const idx = n.parent ? n.parent.children.indexOf(n) + 1 : 1;
+        const cy = st.py + 12 * 1.32 / 2;
+        el("circle", { cx: st.px + 10, cy, r: 10, fill: tint(n.color, 0.85) }, g);
+        const t = el("text", { x: st.px + 10, y: cy, "text-anchor": "middle", "dominant-baseline": "central", "font-size": 10.5, "font-weight": 700, fill: shade(n.color, 0.15) }, g);
+        t.textContent = idx;
+      }
+      m.blocks.forEach((b) => {
+        const t = el("text", { "font-size": b.size, "font-weight": b.weight, fill: b.fill, "letter-spacing": b.spacing || null }, g);
+        b.lines.forEach((ln, i) => {
+          const ts = el("tspan", { x: st.px + (b.indent || 0), y: b.y + b.size * b.lh * i + b.size * (b.lh - 1) / 2 + b.size * 0.8 }, t);
+          ts.textContent = ln;
+        });
+      });
+      // tombol buka/tutup
+      if (n.children.length && !(n === this.root && this.opts.layout === "both")) {
+        const tg = el("g", { class: "mm-toggle", "data-toggle": n.id }, g);
+        el("circle", { r: 10.5, fill: "#ffffff", stroke: n.type === "root" ? "#0f172a" : n.color, "stroke-width": 1.8 }, tg);
+        n.toggleText = el("text", { "text-anchor": "middle", "dominant-baseline": "central", "font-size": 11, "font-weight": 800, fill: n.type === "root" ? "#0f172a" : shade(n.color, 0.1) }, tg);
+        n.toggleEl = tg;
+      }
+      const title = el("title", null, g);
+      title.textContent = [d.code, d.label, d.desc].filter(Boolean).join(" — ");
+      this.gNodes.appendChild(g);
+      n.el = g;
+      return g;
+    }
+
+    _linkPath(p, c) {
+      // titik asal di sisi luar induk, titik tujuan di sisi dalam anak
+      const side = c.side;
+      const off = p.toggleEl ? 6 : 0;
+      const x0 = side > 0 ? p.cur.x + p.w + off : p.cur.x - off;
+      const y0 = p.cur.y + p.h / 2;
+      const x1 = side > 0 ? c.cur.x : c.cur.x + c.w;
+      const y1 = c.cur.y + c.h / 2;
+      const dx = (x1 - x0) * 0.55;
+      return `M${x0},${y0} C${x0 + dx},${y0} ${x1 - dx},${y1} ${x1},${y1}`;
+    }
+
+    _applyFrame() {
+      for (const n of this.nodes) {
+        if (!n.el) continue;
+        const show = n.vis || (n.cur && n.cur.o > 0.01);
+        n.el.style.display = show ? "" : "none";
+        if (!show) { if (n.link) n.link.style.display = "none"; continue; }
+        n.el.setAttribute("transform", `translate(${n.cur.x.toFixed(2)},${n.cur.y.toFixed(2)})`);
+        n.el.setAttribute("opacity", n.cur.o.toFixed(3));
+        if (n.toggleEl) {
+          const right = n.side > 0;
+          n.toggleEl.setAttribute("transform", `translate(${right ? n.w + 6 : -6},${n.h / 2})`);
+          n.toggleText.textContent = n.collapsed ? "+" + n.children.length : "−";
+          n.toggleEl.style.display = this.opts.static && !n.collapsed ? "none" : "";
+        }
+        if (n.parent && n.link) {
+          n.link.style.display = "";
+          n.link.setAttribute("d", this._linkPath(n.parent, n));
+          n.link.setAttribute("opacity", n.cur.o.toFixed(3));
+        }
+      }
+    }
+
+    /** Hitung ulang layout dan render (dengan animasi). anchor: simpul yang dijaga tetap di layar. */
+    update({ animate = true, anchor = null } = {}) {
+      const before = anchor ? { x: anchor.x, y: anchor.y } : null;
+      this.nodes.forEach((n) => { n.wasVis = n.vis; n.vis = false; });
+      this.layout();
+      const vis = this._visibleList();
+      // geser seluruh layout agar simpul jangkar tidak berpindah di layar
+      if (before) {
+        const dx = before.x - anchor.x, dy = before.y - anchor.y;
+        vis.forEach((n) => { n.x += dx; n.y += dy; });
+      }
+      vis.forEach((n) => { n.vis = true; this._nodeEl(n); });
+      // link untuk simpul terlihat
+      vis.forEach((n) => {
+        if (n.parent && !n.link) {
+          n.link = el("path", { fill: "none", stroke: n.color, "stroke-width": LINK_W[n.parent.type] || 1.4, "stroke-linecap": "round", "stroke-opacity": n.type === "risk" ? 0.55 : 0.85, class: "mm-link" }, this.gLinks);
+        }
+      });
+      const targets = new Map();
+      this.nodes.forEach((n) => {
+        if (n.vis) {
+          if (!n.cur) {
+            // muncul dari posisi induk
+            const p = n.parent && n.parent.cur ? n.parent : null;
+            n.cur = p ? { x: p.cur.x + (n.side > 0 ? p.w - n.w * 0.2 : 0), y: p.cur.y + p.h / 2 - n.h / 2, o: 0 } : { x: n.x, y: n.y, o: 0 };
+          } else if (!n.wasVis) {
+            const p = n.parent;
+            n.cur = { x: p.cur.x + (n.side > 0 ? p.w - n.w * 0.2 : 0), y: p.cur.y + p.h / 2 - n.h / 2, o: 0 };
+          }
+          targets.set(n, { x: n.x, y: n.y, o: 1 });
+        } else if (n.cur && n.wasVis) {
+          // sembunyi ke arah leluhur terlihat terdekat
+          let a = n.parent; while (a && !a.vis) a = a.parent;
+          targets.set(n, { x: a.x + (n.side > 0 ? a.w - n.w * 0.2 : 0), y: a.y + a.h / 2 - n.h / 2, o: 0 });
+        }
+      });
+      if (this._anim) cancelAnimationFrame(this._anim);
+      const finish = () => {
+        targets.forEach((t, n) => { n.cur = { ...t }; });
+        this._applyFrame();
+        this._applyHighlight();
+        this._drawMinimap();
+        if (this.opts.onLayout) this.opts.onLayout(this);
+      };
+      if (!animate || this.opts.static) return finish();
+      const start = targets.size ? new Map([...targets].map(([n]) => [n, { ...n.cur }])) : new Map();
+      const t0 = performance.now(), dur = this.opts.duration;
+      const step = (now) => {
+        const t = ease(clamp((now - t0) / dur, 0, 1));
+        targets.forEach((tg, n) => {
+          const s = start.get(n);
+          n.cur = { x: lerp(s.x, tg.x, t), y: lerp(s.y, tg.y, t), o: lerp(s.o, tg.o, t) };
+        });
+        this._applyFrame();
+        if (t < 1) this._anim = requestAnimationFrame(step); else { this._anim = null; finish(); }
+      };
+      this._anim = requestAnimationFrame(step);
+    }
+
+    // ================= buka/tutup =================
+    toggle(id, force) {
+      const n = typeof id === "string" ? this.byId.get(id) : id;
+      if (!n || !n.children.length) return;
+      n.collapsed = force === undefined ? !n.collapsed : !force;
+      this.update({ anchor: n });
+    }
+    expandAll() { this.nodes.forEach((n) => (n.collapsed = false)); this.update(); setTimeout(() => this.fit(), this.opts.duration + 20); }
+    collapseAll() { this.nodes.forEach((n) => (n.collapsed = n !== this.root && n.children.length > 0)); this.update(); setTimeout(() => this.fit(), this.opts.duration + 20); }
+    setDepth(d) {
+      this.nodes.forEach((n) => (n.collapsed = n.children.length > 0 && n.depth >= d));
+      this.update(); setTimeout(() => this.fit(), this.opts.duration + 20);
+    }
+    setLayout(mode) {
+      this.opts.layout = mode;
+      // tombol root bergantung pada mode layout -> bangun ulang elemen
+      this.nodes.forEach((n) => { if (n.el) { n.el.remove(); n.el = null; } });
+      this.update({ animate: true });
+      setTimeout(() => this.fit(), this.opts.duration + 20);
+    }
+    _expandPath(n) { let p = n.parent; while (p) { p.collapsed = false; p = p.parent; } }
+
+    // ================= pilihan & pencarian =================
+    select(id, { focus = false } = {}) {
+      const n = id && (typeof id === "string" ? this.byId.get(id) : id);
+      this.selected = n || null;
+      if (n && !n.vis) { this._expandPath(n); this.update(); }
+      this._applyHighlight();
+      if (n && focus) setTimeout(() => this.focus(n), n.vis ? 0 : this.opts.duration);
+      if (this.opts.onSelect) this.opts.onSelect(n ? this.info(n) : null);
+    }
+    focus(id, k) {
+      const n = typeof id === "string" ? this.byId.get(id) : id;
+      if (!n) return;
+      const r = this.container.getBoundingClientRect();
+      const kk = k || clamp(Math.max(this.view.k, 0.85), 0.2, 1.4);
+      this.animateView({ k: kk, x: r.width / 2 - (n.x + n.w / 2) * kk, y: r.height / 2 - (n.y + n.h / 2) * kk });
+    }
+    info(n) {
+      const path = []; let p = n; while (p) { path.unshift({ id: p.id, label: p.data.label, code: p.data.code, type: p.type }); p = p.parent; }
+      return { id: n.id, type: n.type, data: n.data, color: n.color, path, children: n.children.map((c) => c.data) };
+    }
+    search(q) {
+      q = norm(q).trim();
+      if (!q) { this.matches = null; this._applyHighlight(); return []; }
+      const hits = this.nodes.filter((n) => norm([n.data.code, n.data.label, n.data.desc].join(" ")).includes(q));
+      this.matches = new Set(hits);
+      hits.forEach((n) => this._expandPath(n));
+      this.update();
+      return hits.map((n) => n.id);
+    }
+    _applyHighlight() {
+      const M = this.matches;
+      let keep = null;
+      if (M) { keep = new Set(); M.forEach((n) => { let p = n; while (p) { keep.add(p); p = p.parent; } }); }
+      this.nodes.forEach((n) => {
+        if (!n.el) return;
+        const on = n === this.selected || (M && M.has(n));
+        n.halo.setAttribute("visibility", on ? "visible" : "hidden");
+        n.halo.setAttribute("stroke", n === this.selected ? "#f59e0b" : "#facc15");
+        n.el.classList.toggle("mm-dim", !!M && !keep.has(n));
+        if (n.link) n.link.classList.toggle("mm-dim", !!M && !keep.has(n));
+      });
+    }
+
+    // ================= viewport =================
+    _applyView() {
+      const { k, x, y } = this.view;
+      this.vp.setAttribute("transform", `translate(${x},${y}) scale(${k})`);
+      this._drawMinimapView();
+      if (this.opts.onView) this.opts.onView(this.view);
+    }
+    animateView(to, dur = 420) {
+      const from = { ...this.view };
+      to = { ...to };
+      this._vState = { from, to };  // digeser oleh ResizeObserver bila kanvas berubah ukuran
+      const t0 = performance.now();
+      cancelAnimationFrame(this._vAnim);
+      const step = (now) => {
+        const t = ease(clamp((now - t0) / dur, 0, 1));
+        this.view = { k: lerp(from.k, to.k, t), x: lerp(from.x, to.x, t), y: lerp(from.y, to.y, t) };
+        this._applyView();
+        if (t < 1) this._vAnim = requestAnimationFrame(step); else this._vState = null;
+      };
+      this._vAnim = requestAnimationFrame(step);
+    }
+    fit(animate = true, pad = 40) {
+      const r = this.container.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      const b = this.bounds();
+      const k = clamp(Math.min((r.width - pad * 2) / b.w, (r.height - pad * 2) / b.h), 0.04, 1.25);
+      const to = { k, x: r.width / 2 - (b.x + b.w / 2) * k, y: r.height / 2 - (b.y + b.h / 2) * k };
+      if (animate) this.animateView(to); else { this.view = to; this._applyView(); }
+    }
+    zoomAt(factor, cx, cy, animate) {
+      const r = this.container.getBoundingClientRect();
+      if (cx == null) { cx = r.width / 2; cy = r.height / 2; }
+      const k = clamp(this.view.k * factor, 0.04, 4);
+      const f = k / this.view.k;
+      const to = { k, x: cx - (cx - this.view.x) * f, y: cy - (cy - this.view.y) * f };
+      if (animate) this.animateView(to, 220); else { this.view = to; this._applyView(); }
+    }
+    zoomBy(f) { this.zoomAt(f, null, null, true); }
+    zoomTo(k) { this.zoomAt(k / this.view.k, null, null, true); }
+
+    _fitStatic(pad = 36) {
+      const b = this.bounds();
+      const W = Math.ceil(b.w + pad * 2), H = Math.ceil(b.h + pad * 2);
+      this.svg.setAttribute("width", W); this.svg.setAttribute("height", H);
+      this.svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      this.view = { k: 1, x: pad - b.x, y: pad - b.y };
+      this._applyView();
+      this.staticSize = { w: W, h: H };
+    }
+
+    _bindEvents() {
+      const svg = this.svg, pts = new Map();
+      let drag = null, pinch = null;
+      this._moved = false;
+      svg.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const r = svg.getBoundingClientRect();
+        const f = Math.exp(-e.deltaY * (e.ctrlKey ? 0.012 : 0.0016) * (e.deltaMode === 1 ? 16 : 1));
+        this.zoomAt(f, e.clientX - r.left, e.clientY - r.top, false);
+      }, { passive: false });
+      svg.addEventListener("pointerdown", (e) => {
+        if (e.button !== 0 && e.pointerType === "mouse") return;
+        svg.setPointerCapture(e.pointerId);
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        this._moved = false;
+        if (pts.size === 1) drag = { x: e.clientX, y: e.clientY, vx: this.view.x, vy: this.view.y };
+        if (pts.size === 2) {
+          const [a, b] = [...pts.values()];
+          pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), k: this.view.k };
+          drag = null;
+        }
+      });
+      svg.addEventListener("pointermove", (e) => {
+        if (!pts.has(e.pointerId)) return;
+        pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pinch && pts.size === 2) {
+          const [a, b] = [...pts.values()];
+          const r = svg.getBoundingClientRect();
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          this.zoomAt((pinch.k * d / pinch.d) / this.view.k, (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top, false);
+          this._moved = true;
+        } else if (drag) {
+          const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+          if (Math.abs(dx) + Math.abs(dy) > 4) { this._moved = true; svg.classList.add("mm-grabbing"); }
+          if (this._moved) { this.view.x = drag.vx + dx; this.view.y = drag.vy + dy; this._applyView(); }
+        }
+      });
+      const end = (e) => {
+        pts.delete(e.pointerId);
+        if (pts.size < 2) pinch = null;
+        if (!pts.size) { drag = null; svg.classList.remove("mm-grabbing"); }
+      };
+      svg.addEventListener("pointerup", end);
+      svg.addEventListener("pointercancel", end);
+      svg.addEventListener("click", (e) => {
+        if (this._moved) return;
+        const tg = e.target.closest("[data-toggle]");
+        if (tg) { this.toggle(tg.getAttribute("data-toggle")); return; }
+        const g = e.target.closest(".mm-node");
+        if (!g) return this.select(null);
+        const n = this.byId.get(g.getAttribute("data-id"));
+        if (n.collapsed) this.toggle(n, true); // klik simpul tertutup = buka
+        this.select(n);
+      });
+      // saat ukuran kanvas berubah (panel dibuka/ditutup), jaga titik tengah tetap
+      let last = null;
+      this._ro = new ResizeObserver(([en]) => {
+        const { width: w, height: h } = en.contentRect;
+        if (last && w && h) {
+          const dx = (w - last.w) / 2, dy = (h - last.h) / 2;
+          this.view.x += dx; this.view.y += dy; this._applyView();
+          if (this._vState) [this._vState.from, this._vState.to].forEach((v) => { v.x += dx; v.y += dy; });
+        }
+        last = { w, h };
+        this._drawMinimap();
+      });
+      this._ro.observe(this.container);
+    }
+
+    // ================= minimap =================
+    _initMinimap(box) {
+      this.mini = { box, svg: el("svg", { class: "mm-mini-svg", width: "100%", height: "100%" }, box) };
+      this.mini.g = el("g", null, this.mini.svg);
+      this.mini.view = el("rect", { class: "mm-mini-view", fill: "rgba(37,99,235,.10)", stroke: "#2563eb", "stroke-width": 1.5, rx: 2 }, this.mini.svg);
+      const go = (e) => {
+        const r = this.mini.svg.getBoundingClientRect(), s = this.mini.s, b = this.mini.b;
+        const wx = (e.clientX - r.left - this.mini.ox) / s + b.x, wy = (e.clientY - r.top - this.mini.oy) / s + b.y;
+        const cr = this.container.getBoundingClientRect();
+        this.view.x = cr.width / 2 - wx * this.view.k; this.view.y = cr.height / 2 - wy * this.view.k;
+        this._applyView();
+      };
+      let down = false;
+      this.mini.svg.addEventListener("pointerdown", (e) => { down = true; this.mini.svg.setPointerCapture(e.pointerId); go(e); });
+      this.mini.svg.addEventListener("pointermove", (e) => { if (down) go(e); });
+      this.mini.svg.addEventListener("pointerup", () => (down = false));
+    }
+    _drawMinimap() {
+      if (!this.mini) return;
+      const r = this.mini.box.getBoundingClientRect();
+      const vis = this._visibleList(), b = this.bounds(vis);
+      const s = Math.min((r.width - 12) / b.w, (r.height - 12) / b.h);
+      Object.assign(this.mini, { b, s, ox: (r.width - b.w * s) / 2, oy: (r.height - b.h * s) / 2 });
+      this.mini.g.innerHTML = "";
+      this.mini.g.setAttribute("transform", `translate(${this.mini.ox},${this.mini.oy}) scale(${s}) translate(${-b.x},${-b.y})`);
+      vis.forEach((n) => {
+        el("rect", { x: n.x, y: n.y, width: n.w, height: n.h, rx: 6, fill: n.type === "risk" ? tint(n.color, 0.55) : n.type === "hip" ? tint(n.color, 0.3) : n.type === "root" ? "#0f172a" : n.color }, this.mini.g);
+      });
+      this._drawMinimapView();
+    }
+    _drawMinimapView() {
+      if (!this.mini || !this.mini.b) return;
+      const cr = this.container.getBoundingClientRect(), { k, x, y } = this.view, m = this.mini;
+      const wx = -x / k, wy = -y / k, ww = cr.width / k, wh = cr.height / k;
+      m.view.setAttribute("x", m.ox + (wx - m.b.x) * m.s); m.view.setAttribute("y", m.oy + (wy - m.b.y) * m.s);
+      m.view.setAttribute("width", Math.max(4, ww * m.s)); m.view.setAttribute("height", Math.max(4, wh * m.s));
+    }
+
+    // ================= ekspor =================
+    toSVG({ pad = 36, background = "#ffffff" } = {}) {
+      const b = this.bounds();
+      const W = Math.ceil(b.w + pad * 2), H = Math.ceil(b.h + pad * 2);
+      const out = this.svg.cloneNode(true);
+      out.removeAttribute("class"); out.removeAttribute("style");
+      out.setAttribute("xmlns", SVGNS);
+      out.setAttribute("width", W); out.setAttribute("height", H);
+      out.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      out.setAttribute("font-family", FONT);
+      out.querySelector(".mm-viewport").setAttribute("transform", `translate(${pad - b.x},${pad - b.y})`);
+      out.querySelectorAll("[style*='display: none'],[visibility='hidden']").forEach((e) => e.remove());
+      out.querySelectorAll(".mm-dim").forEach((e) => e.classList.remove("mm-dim"));
+      out.querySelectorAll(".mm-toggle").forEach((t) => {
+        const n = this.byId.get(t.getAttribute("data-toggle"));
+        if (n && !n.collapsed) t.remove();
+      });
+      const bg = el("rect", { width: W, height: H, fill: background });
+      out.insertBefore(bg, out.firstChild.nextSibling);
+      return { svg: new XMLSerializer().serializeToString(out), w: W, h: H };
+    }
+    toPNG({ scale = 2, background = "#ffffff" } = {}) {
+      const { svg, w, h } = this.toSVG({ background });
+      const max = 16000, s = Math.min(scale, max / w, max / h, Math.sqrt(2.6e8 / (w * h)));
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement("canvas");
+          c.width = Math.round(w * s); c.height = Math.round(h * s);
+          const ctx = c.getContext("2d");
+          ctx.setTransform(s, 0, 0, s, 0, 0);
+          ctx.drawImage(img, 0, 0);
+          c.toBlob((bl) => (bl ? resolve(bl) : reject(new Error("Gagal membuat PNG"))), "image/png");
+        };
+        img.onerror = reject;
+        img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      });
+    }
+  }
+
+  MindMap.utils = { tint, shade, mix, norm };
+  global.MindMap = MindMap;
+})(window);
+
+</script>
+<script>
+/* UI aplikasi mindmap: toolbar, pencarian, navigasi, panel detail, ekspor, mode poster. */
+(function () {
+  "use strict";
+  const DATA = window.MM_DATA, PAGE = window.MM_PAGE;
+  const { tint, shade } = MindMap.utils;
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const TYPE = { root: "Ringkasan", probis: "Proses Bisnis", sub: "Sub Probis", hip: "Hipotesis", risk: "Risiko" };
+
+  const href = {
+    probisHtml: (d) => `${PAGE.base}probis/${d.slug}.html`,
+    probisPng: (d) => `${PAGE.base}probis/${d.slug}.png`,
+    subHtml: (d) => `${PAGE.base}subprobis/${d.slug}.html`,
+    subPng: (d) => `${PAGE.base}subprobis/${d.slug}.png`,
+  };
+
+  /** Hitung turunan (tidak termasuk simpul itu sendiri). */
+  function count(d) {
+    const c = { sub: 0, hip: 0, risk: 0 };
+    (function w(n) { if (n.type === "sub") c.sub++; if (n.type === "hip" && !n.placeholder) c.hip++; if (n.type === "risk") c.risk++; (n.children || []).forEach(w); })({ children: d.children });
+    return c;
+  }
+  const crumbsHtml = (sepCls) => PAGE.crumbs.map((c) => (c.href ? `<a href="${esc(c.href)}">${esc(c.label)}</a>` : `<span>${esc(c.label)}</span>`)).join(`<span class="${sepCls}">›</span>`);
+
+  const LEGEND = `
+    <span><i style="background:#0f172a"></i>Pusat</span>
+    <span><i style="background:#1e3a8a"></i>Proses Bisnis</span>
+    <span><i style="background:#2563eb"></i>Sub Probis</span>
+    <span><i style="background:#dbeafe;border:1px solid #93c5fd"></i>Hipotesis</span>
+    <span><i style="background:#fff;border:1px solid #93c5fd"></i>Risiko</span>`;
+
+  // ======================================================================
+  // MODE POSTER (dipakai untuk menghasilkan gambar PNG)
+  // ======================================================================
+  if (PAGE.static) {
+    document.body.classList.add("poster");
+    const c = count(DATA);
+    const statsHtml = [["Sub Probis", c.sub], ["Hipotesis", c.hip], ["Risiko", c.risk]]
+      .filter(([, v]) => v).map(([k, v]) => `<div class="p-stat"><b>${v}</b><span>${k}</span></div>`).join("");
+    let foot = "";
+    if (DATA.type === "sub" && DATA.detail) {
+      const d = DATA.detail, cards = [];
+      if (d.titikKritis && d.titikKritis.length) cards.push(`<div class="p-card"><h5>Titik Kritis</h5><ul>${d.titikKritis.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>`);
+      if (d.risikoInheren) cards.push(`<div class="p-card"><h5>Risiko Inheren</h5><p>${esc(d.risikoInheren)}</p></div>`);
+      if (d.klb && d.klb.length) cards.push(`<div class="p-card"><h5>K/L/B Terkait</h5><div class="chips">${d.klb.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div></div>`);
+      if (cards.length) foot = `<div class="p-foot">${cards.join("")}</div>`;
+    }
+    document.body.innerHTML = `
+      <div class="poster-wrap" id="poster">
+        <div class="p-head">
+          <div><div class="p-kicker">${esc(PAGE.kicker)}</div><div class="p-title">${esc(PAGE.title)}</div>
+          <div class="p-crumbs">${PAGE.crumbs.map((x) => esc(x.label)).join("  ›  ")}</div></div>
+          <div class="p-stats">${statsHtml}</div>
+        </div>
+        <div class="p-map" id="pmap"></div>
+        ${foot}
+        <div class="p-src"><span>Sumber: ${esc(PAGE.source)} — sheet ${esc(PAGE.sheet)}${PAGE.variant ? " · " + esc(PAGE.variant) : ""}</span><span class="p-legend">${LEGEND}</span><span>Dibuat ${esc(PAGE.generated)}</span></div>
+      </div>`;
+    const mm = new MindMap($("#pmap"), DATA, { static: true, layout: PAGE.layout, depth: PAGE.depth });
+    const wrap = $("#poster");
+    wrap.style.width = Math.max(1100, mm.staticSize.w) + "px";
+    const r = wrap.getBoundingClientRect();
+    window.__MM_READY = { w: Math.ceil(r.width), h: Math.ceil(r.height) };
+    return;
+  }
+
+  // ======================================================================
+  // MODE INTERAKTIF
+  // ======================================================================
+  const ICON = {
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+    fit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>',
+    map: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="12" y="11" width="6" height="5" rx="1"/></svg>',
+    full: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+    down: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+    side: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/></svg>',
+    grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+    logo: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3" fill="#fff"/><circle cx="4" cy="6" r="2"/><circle cx="20" cy="6" r="2"/><circle cx="4" cy="18" r="2"/><circle cx="20" cy="18" r="2"/><path d="M6 7l3.5 3M18 7l-3.5 3M6 17l3.5-3M18 17l-3.5-3"/></svg>',
+  };
+
+  const maxDepth = (function d(n) { return 1 + Math.max(0, ...(n.children || []).map(d)); })(DATA) - 1;
+  const depthLabels = { probis: "Probis", sub: "Sub Probis", hip: "Hipotesis", risk: "Risiko" };
+  const levelTypes = [];
+  (function w(n, dep) { if (dep && !levelTypes[dep]) levelTypes[dep] = n.type; (n.children || []).forEach((c) => w(c, dep + 1)); })(DATA, 0);
+
+  document.title = PAGE.title + " — Mindmap Probis KDKMP";
+  document.body.innerHTML = `
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">${ICON.logo}</div>
+        <div class="brand-text"><div class="brand-title">${esc(PAGE.title)}</div><div class="crumbs">${crumbsHtml("sep")}</div></div>
+      </div>
+      <div class="search"><span class="ico">${ICON.search}</span>
+        <input id="q" type="search" placeholder="Cari probis, hipotesis, risiko…  ( / )" autocomplete="off">
+        <div class="nav"><span id="qn"></span><button id="qp" title="Sebelumnya">▲</button><button id="qx" title="Berikutnya">▼</button></div>
+      </div>
+      <div class="actions">
+        <div class="seg hide-md" id="levels"><span class="lbl">Tampilkan s.d.</span>
+          ${levelTypes.slice(1).map((t, i) => `<button data-lv="${i + 1}">${depthLabels[t]}</button>`).join("")}
+        </div>
+        <div class="seg hide-md" id="layouts"><button data-ly="both" title="Cabang ke kiri & kanan">Dua sisi</button><button data-ly="right" title="Semua cabang ke kanan">Satu sisi</button></div>
+        <div class="dropdown">
+          <button class="btn primary" id="dl">${ICON.down}Unduh</button>
+          <div class="menu" id="dlmenu">
+            <button data-ex="png">Gambar PNG (tampilan saat ini)<small>Cabang yang terbuka saja, resolusi 2×</small></button>
+            <button data-ex="pngall">Gambar PNG (semua dibuka)<small>Seluruh cabang dibuka otomatis</small></button>
+            <button data-ex="svg">Vektor SVG<small>Tajam di semua ukuran, bisa diedit</small></button>
+            ${PAGE.pngs && PAGE.pngs.length ? "<hr>" + PAGE.pngs.map((p) => `<a href="${esc(p.href)}" download>${esc(p.label)}<small>File PNG siap pakai</small></a>`).join("") : ""}
+          </div>
+        </div>
+        ${PAGE.gallery ? `<a class="btn hide-md" href="${esc(PAGE.gallery)}">${ICON.grid}Galeri</a>` : ""}
+      </div>
+    </header>
+    <div class="body" id="body">
+      <aside class="sidebar" id="sidebar"></aside>
+      <section class="canvas" id="canvas">
+        <div class="hud side-toggle"><button id="sideBtn" title="Navigasi">${ICON.side}</button></div>
+        <div class="hud hint" id="hint">Gulir untuk zoom · seret untuk geser · klik simpul untuk detail · klik ⊕ untuk buka/tutup</div>
+        <div class="minimap" id="minimap"></div>
+        <div class="hud legend">${LEGEND}</div>
+        <div class="hud zoombar">
+          <button id="zo" title="Perkecil (−)">${ICON.minus}</button>
+          <span class="pct" id="pct" title="Kembali ke 100%">100%</span>
+          <button id="zi" title="Perbesar (+)">${ICON.plus}</button>
+          <span class="div"></span>
+          <button id="zf" title="Sesuaikan layar (0)">${ICON.fit}</button>
+          <button id="zm" title="Minimap (M)">${ICON.map}</button>
+          <button id="zF" title="Layar penuh (F)">${ICON.full}</button>
+        </div>
+      </section>
+      <aside class="detail" id="detail"><div class="detail-inner" id="detailInner"></div></aside>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>`;
+
+  const toast = (msg) => { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 2200); };
+
+  const mm = new MindMap($("#canvas"), DATA, {
+    layout: PAGE.layout, depth: PAGE.depth, minimap: $("#minimap"),
+    onView: (v) => {
+      $("#pct").textContent = Math.round(v.k * 100) + "%";
+      const c = $("#canvas");
+      c.style.backgroundSize = `${22 * v.k}px ${22 * v.k}px`;
+      c.style.backgroundPosition = `${v.x}px ${v.y}px`;
+    },
+    onSelect: renderDetail,
+  });
+  // svg dibuat setelah overlay -> pindahkan ke belakang
+  $("#canvas").prepend(mm.svg);
+  window.mindmap = mm;
+
+  // ---------------- sidebar ----------------
+  function renderSidebar() {
+    const c = count(DATA);
+    const item = (d, extra = "") => `
+      <div class="o-item" data-id="${d.id}">
+        <span class="o-dot" style="background:${d.color || "#0f172a"}"></span>
+        <span class="o-code">${esc(d.code || "")}</span>
+        <span class="o-label">${esc(d.label)}${extra}</span>
+      </div>`;
+    const meta = (d) => {
+      const k = count(d), links = [];
+      if (PAGE.links && d.type === "probis") links.push(`<a href="${href.probisHtml(d)}">Halaman</a>`, `<a href="${href.probisPng(d)}" target="_blank">PNG</a>`);
+      if (PAGE.links && d.type === "sub") links.push(`<a href="${href.subHtml(d)}">Halaman</a>`, `<a href="${href.subPng(d)}" target="_blank">PNG</a>`);
+      const parts = [];
+      if (k.hip) parts.push(`${k.hip} hipotesis`);
+      if (k.risk) parts.push(`${k.risk} risiko`);
+      return `<div class="o-meta"><span>${parts.join(" · ")}</span>${links.join("")}</div>`;
+    };
+    const kids = DATA.children || [];
+    $("#sidebar").innerHTML = `
+      <div class="side-head"><div class="stats">
+        ${[["Sub Probis", c.sub], ["Hipotesis", c.hip], ["Risiko", c.risk]].filter(([, v]) => v).map(([k, v]) => `<div class="stat"><b>${v}</b><span>${k}</span></div>`).join("")}
+      </div></div>
+      <div class="side-title">Navigasi ${esc(TYPE[kids[0] && kids[0].type] || "")}</div>
+      <ul class="outline">
+        ${kids.map((k) => `<li class="o-top">${item(k, meta(k))}
+          ${k.children && k.children.length && k.type !== "hip" ? `<ul>${k.children.map((g) => `<li>${item(g, g.type === "risk" ? "" : meta(g))}</li>`).join("")}</ul>` : ""}
+          ${k.type === "hip" ? `<ul>${(k.children || []).map((g) => `<li>${item(g)}</li>`).join("")}</ul>` : ""}
+        </li>`).join("")}
+      </ul>`;
+    $("#sidebar").addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      const it = e.target.closest(".o-item");
+      if (it) { mm.select(it.dataset.id, { focus: true }); if (innerWidth <= 1100) $("#body").classList.remove("side-open"); }
+    });
+  }
+  renderSidebar();
+
+  // ---------------- panel detail ----------------
+  function renderDetail(info) {
+    const box = $("#detail");
+    document.querySelectorAll(".o-item.active").forEach((e) => e.classList.remove("active"));
+    if (!info) { box.classList.remove("open"); return; }
+    const act = document.querySelector(`.o-item[data-id="${info.id}"]`);
+    if (act) { act.classList.add("active"); act.scrollIntoView({ block: "nearest" }); }
+    const d = info.data, col = info.type === "root" ? "#0f172a" : info.color;
+    const headBg = info.type === "hip" || info.type === "risk" ? `linear-gradient(135deg, ${shade(col, 0.1)}, ${shade(col, 0.35)})` : `linear-gradient(135deg, ${col}, ${shade(col, 0.3)})`;
+    const listVars = `style="--c-bg:${tint(col, 0.85)};--c-fg:${shade(col, 0.2)}"`;
+    const sec = (title, inner, right = "") => `<div class="d-sec"><h4><span>${title}</span><span>${right}</span></h4>${inner}</div>`;
+    const kidList = (arr, fn) => `<ul class="d-list" ${listVars}>${arr.map((c) => `<li class="click" data-go="${c.id}">${fn(c)}</li>`).join("")}</ul>`;
+    let body = "";
+    const k = count(d);
+    if (info.type === "root" || info.type === "probis") {
+      if (d.sub) body += sec("Keterangan", `<p>${esc(d.sub)}</p>`);
+      body += sec(TYPE[(d.children[0] || {}).type] || "Cabang", kidList(d.children, (c) => {
+        const kc = count(c);
+        return `<b>${esc(c.code || "")}</b> ${esc(c.label)}<br><small style="color:#64748b">${[kc.hip && kc.hip + " hipotesis", kc.risk && kc.risk + " risiko"].filter(Boolean).join(" · ")}</small>`;
+      }), d.children.length);
+    }
+    if (info.type === "sub") {
+      const dt = d.detail || {};
+      if (dt.titikKritis && dt.titikKritis.length) body += sec("Titik Kritis", `<ul class="d-list bul" ${listVars}>${dt.titikKritis.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`);
+      if (dt.risikoInheren) body += sec("Risiko Inheren", `<p>${esc(dt.risikoInheren)}</p>`);
+      body += sec("Hipotesis", kidList(d.children, (c) => `<b>${esc(c.label)}</b><br><small style="color:#64748b">${(c.children || []).length} risiko</small>`), d.children.length);
+      if (dt.klb && dt.klb.length) body += sec("K/L/B Terkait", `<div class="chips">${dt.klb.map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>`, dt.klb.length);
+    }
+    if (info.type === "hip") {
+      if (d.desc) body += sec("Uraian Hipotesis", `<p>${esc(d.desc)}</p>`);
+      body += sec("Risiko", kidList(d.children, (c) => esc(c.label)), d.children.length);
+    }
+    if (info.type === "risk") {
+      const hip = info.path[info.path.length - 2];
+      body += sec("Uraian Risiko", `<p>${esc(d.label)}</p>`);
+      if (hip) body += sec("Hipotesis induk", `<ul class="d-list" ${listVars}><li class="click" data-go="${hip.id}">${esc(hip.label)}</li></ul>`);
+    }
+    const links = [];
+    if (PAGE.links && d.slug && info.type === "probis") links.push(`<a href="${href.probisHtml(d)}">↗ Halaman Probis</a>`, `<a href="${href.probisPng(d)}" target="_blank">🖼 Gambar PNG</a>`);
+    if (PAGE.links && d.slug && info.type === "sub") links.push(`<a href="${href.subHtml(d)}">↗ Halaman Sub Probis</a>`, `<a href="${href.subPng(d)}" target="_blank">🖼 Gambar PNG</a>`);
+    const kicker = `${TYPE[info.type]}${d.code ? " " + d.code : ""}${info.type !== "risk" && k.risk ? ` · ${k.risk} risiko` : ""}`;
+    $("#detailInner").innerHTML = `
+      <div class="d-head" style="background:${headBg}">
+        <button class="d-close" id="dclose" title="Tutup (Esc)">×</button>
+        <div class="d-kicker">${esc(kicker)}</div>
+        <div class="d-title">${esc(d.label)}</div>
+        <div class="d-path">${info.path.slice(0, -1).map((p) => `<a data-go="${p.id}">${esc(p.code ? p.code + " " : "")}${esc(p.label)}</a>`).join(" › ")}</div>
+      </div>
+      <div class="d-body">${body}${links.length ? `<div class="d-links">${links.join("")}</div>` : ""}</div>`;
+    box.classList.add("open");
+  }
+  $("#detail").addEventListener("click", (e) => {
+    if (e.target.closest("#dclose")) return mm.select(null);
+    const go = e.target.closest("[data-go]");
+    if (go) mm.select(go.dataset.go, { focus: true });
+  });
+
+  // ---------------- toolbar ----------------
+  const setActive = (sel, attr, val) => document.querySelectorAll(`${sel} button`).forEach((b) => b.classList.toggle("on", b.dataset[attr] == val));
+  setActive("#layouts", "ly", PAGE.layout);
+  setActive("#levels", "lv", Math.min(PAGE.depth, maxDepth));
+  $("#levels").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; mm.setDepth(+b.dataset.lv); setActive("#levels", "lv", b.dataset.lv); });
+  $("#layouts").addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; mm.setLayout(b.dataset.ly); setActive("#layouts", "ly", b.dataset.ly); });
+  $("#zi").onclick = () => mm.zoomBy(1.25);
+  $("#zo").onclick = () => mm.zoomBy(0.8);
+  $("#zf").onclick = () => mm.fit();
+  $("#pct").onclick = () => mm.zoomTo(1);
+  $("#zm").onclick = () => $("#minimap").classList.toggle("hidden");
+  $("#zF").onclick = () => (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen().catch(() => {}));
+  $("#sideBtn").onclick = () => {
+    if (innerWidth <= 1100) $("#body").classList.toggle("side-open");
+    else { $("#body").classList.toggle("no-side"); }
+    setTimeout(() => mm._drawMinimapView(), 50);
+  };
+  setTimeout(() => $("#hint").classList.add("gone"), 6000);
+
+  // ---------------- pencarian ----------------
+  let hits = [], hi = 0;
+  const showHit = () => { $("#qn").textContent = hits.length ? `${hi + 1}/${hits.length}` : ($("#q").value ? "0" : ""); if (hits.length) setTimeout(() => mm.focus(hits[hi], 1), mm.opts.duration + 30); };
+  let qT;
+  $("#q").addEventListener("input", () => { clearTimeout(qT); qT = setTimeout(() => { hits = mm.search($("#q").value); hi = 0; showHit(); }, 220); });
+  $("#q").addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && hits.length) { hi = (hi + (e.shiftKey ? hits.length - 1 : 1)) % hits.length; showHit(); mm.select(hits[hi]); }
+    if (e.key === "Escape") { $("#q").value = ""; hits = mm.search(""); showHit(); $("#q").blur(); }
+  });
+  $("#qx").onclick = () => { if (hits.length) { hi = (hi + 1) % hits.length; showHit(); } };
+  $("#qp").onclick = () => { if (hits.length) { hi = (hi + hits.length - 1) % hits.length; showHit(); } };
+
+  // ---------------- ekspor ----------------
+  const fname = (PAGE.file || "mindmap");
+  const save = (blob, name) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000); };
+  $("#dl").onclick = (e) => { e.stopPropagation(); $("#dlmenu").classList.toggle("open"); };
+  document.addEventListener("click", () => $("#dlmenu").classList.remove("open"));
+  $("#dlmenu").addEventListener("click", async (e) => {
+    const b = e.target.closest("[data-ex]"); if (!b) return;
+    $("#dlmenu").classList.remove("open");
+    try {
+      if (b.dataset.ex === "svg") { save(new Blob([mm.toSVG().svg], { type: "image/svg+xml" }), fname + ".svg"); return toast("SVG diunduh"); }
+      if (b.dataset.ex === "pngall") { mm.nodes.forEach((n) => (n.collapsed = false)); mm.update({ animate: false }); }
+      toast("Menyiapkan gambar…");
+      save(await mm.toPNG({ scale: 2 }), fname + (b.dataset.ex === "pngall" ? "-lengkap" : "") + ".png");
+      toast("PNG diunduh");
+    } catch (err) { console.error(err); toast("Gagal mengekspor: " + err.message); }
+  });
+
+  // ---------------- keyboard ----------------
+  document.addEventListener("keydown", (e) => {
+    if (e.target.matches("input, textarea")) return;
+    const pan = 80;
+    switch (e.key) {
+      case "+": case "=": mm.zoomBy(1.25); break;
+      case "-": case "_": mm.zoomBy(0.8); break;
+      case "0": mm.fit(); break;
+      case "1": mm.zoomTo(1); break;
+      case "/": e.preventDefault(); $("#q").focus(); break;
+      case "f": case "F": $("#zF").click(); break;
+      case "m": case "M": $("#zm").click(); break;
+      case "Escape": mm.select(null); break;
+      case "ArrowLeft": mm.view.x += pan; mm._applyView(); break;
+      case "ArrowRight": mm.view.x -= pan; mm._applyView(); break;
+      case "ArrowUp": mm.view.y += pan; mm._applyView(); break;
+      case "ArrowDown": mm.view.y -= pan; mm._applyView(); break;
+      default: return;
+    }
+  });
+  addEventListener("resize", () => mm._drawMinimap());
+  // fokus dari hash, mis. index.html#s1_3
+  if (location.hash.length > 1 && mm.byId.has(location.hash.slice(1))) setTimeout(() => mm.select(location.hash.slice(1), { focus: true }), 300);
+})();
+
+</script>
+</body>
+</html>
